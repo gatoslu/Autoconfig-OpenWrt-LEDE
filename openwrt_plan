@@ -1,0 +1,19 @@
+# 添加进openwrt的计划列表中
+# 定时更新Chinadns的ignore列表
+30    4     *     *     *     /root/update_ignorelist>/dev/null 2>&1
+# 每十分钟检查一次shadowsocks的运行情况
+*/10 * * * * /root/ss_watchdog >> /var/log/shadowsocks_watchdog.log 2>&1
+# 每周六凌晨3点清除shadowsocks的看门狗日志文件，避免日志文件过于庞大
+0 3 * * 6 echo "" > /var/log/shadowsocks_watchdog.log
+# 每周六凌晨5点定时升级openwrt中的软件
+  0 5 * * 6 /root/auto_upgrade.sh
+
+
+# 文件格式说明
+#  ——分钟 (0 - 59)
+# |  ——小时 (0 - 23)
+# | |  ——日   (1 - 31)
+# | | |  ——月   (1 - 12)
+# | | | |  ——星期 (0 - 7)（星期日=0或7）
+# | | | | |
+# * * * * * 被执行的命令
