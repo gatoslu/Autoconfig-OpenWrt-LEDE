@@ -1,0 +1,152 @@
+#!/bin/sh
+#自动安装openwrt版shadowsocks脚本和用户配置脚本
+ 
+INSTALLED=$(opkg list-installed)
+
+for a in $(opkg print-architecture | awk '{print $2}'); do
+	case "$a" in
+		all|noarch)
+			;;
+		ar71xx|bcm53xx|bcm2708|brcm47xx|brcm63xx|kirkwood|mvebu|oxnas|ramips_24kec|sunxi|x86|x86_64)
+			ARCH=${a}
+			;;
+		*)
+			echo "Architectures not support."
+			exit 0
+			;;
+	esac
+done
+
+echo -e "\nTarget Arch:\033[32m $ARCH \033[0m\n"
+
+sed -i "s/^\(option check_signature\)/#\1/" /etc/opkg.conf
+
+if !(grep -q "openwrt_dist" /etc/opkg.conf); then
+	echo "src/gz openwrt_dist http://openwrt-dist.sourceforge.net/packages/OpenWrt/base/$ARCH" >>/etc/opkg.conf
+	echo "src/gz openwrt_dist_luci http://openwrt-dist.sourceforge.net/packages/OpenWrt/luci" >>/etc/opkg.conf
+fi
+
+opkg update
+
+if echo "$INSTALLED" | grep -q "luci"; then
+	LuCI=yes
+fi
+
+read -p "Install the ChinaDNS [Y/n]?" INS_CD
+read -p "Install the DNS-Forwarder [Y/n]?" INS_DF
+read -p "Install the shadowsocks-libev [Y/n]?" INS_SS
+read -p "Install the ShadowVPN [Y/n]?" INS_SV
+
+#询问自动安装看门狗脚本
+read -p "Created the shadowsocks_watchdog [Y/n]?" INS_SSDOG
+#询问安装自动升级国内路由表脚本
+read -p "Created the update_ignorelist [Y/n]?" INS_IGNORE
+#询问安装自动程序升级模块脚本
+read -p "Created the autoupgrade.sh [Y/n]?" INS_AUTOUP
+
+
+
+if echo ${INS_CD} | grep -qi "^y"; then
+	opkg install ChinaDNS
+	if [ "$LuCI" = "yes" ]; then
+		opkg install luci-app-chinadns
+		/etc/init.d/chinadns enable
+	fi
+fi
+
+if echo ${INS_DF} | grep -qi "^y"; then
+	opkg install dns-forwarder
+	if [ "$LuCI" = "yes" ]; then
+		opkg install luci-app-dns-forwarder
+		/etc/init.d/dns-forwarder enable
+	fi
+fi
+
+if echo ${INS_SS} | grep -qi "^y"; then
+	if echo "$INSTALLED" | grep -q "libmbedtls"; then
+		opkg install shadowsocks-libev-mbedtls
+	else
+		opkg install shadowsocks-libev
+	fi
+	if [ "$LuCI" = "yes" ]; then
+		opkg install luci-app-shadowsocks
+		/etc/init.d/shadowsocks enable
+	fi
+fi
+
+if echo ${INS_SV} | grep -qi "^y"; then
+	opkg install ShadowVPN
+	if [ "$LuCI" = "yes" ]; then
+		opkg install luci-app-shadowvpn
+		/etc/init.d/shadowvpn enable
+	fi
+fi
+#创建shadowsocks看门狗脚本
+if echo ${INS_SSDOG} | grep -qi "^y"; then
+	echo "#!/bin/sh">/ss_watchdog
+	echo "LOGTIME=$(date "+%Y-%m-%d %H:%M:%S")" >>/ss_watchdog
+	echo "wget --spider --quiet --tries=1 --timeout=10 https://www.google.com/" >>/ss_watchdog
+	echo "LOGTIME=$(date "+%Y-%m-%d %H:%M:%S")" >>/ss_watchdog
+	echo "if [ "$?" == "0" ]; then" >>/ss_watchdog
+	echo "echo '['$LOGTIME'] No Problem.'" >>/ss_watchdog
+	echo "exit 0" >>/ss_watchdog
+	echo "else" >>/ss_watchdog
+	echo "wget --spider --quiet --tries=1 --timeout=10 www.baidu.com" >>/ss_watchdog
+	echo "if [ "$?" == "0" ]; then" >>/ss_watchdog
+	echo "echo '['$LOGTIME'] Problem decteted, restarting shadowsocks.'" >>/ss_watchdog
+	echo "/etc/init.d/shadowsocks restart" >>/ss_watchdog
+	echo "else" >>/ss_watchdog
+	echo "echo '['$LOGTIME'] Network Problem. Do nothing.'" >>/ss_watchdog
+	echo "fi" >>/ss_watchdog
+	echo "fi" >>/ss_watchdog
+	#echo "src/gz openwrt_dist_luci http://openwrt-dist.sourceforge.net/packages/OpenWrt/luci" >>/ss_watchdog
+	#配置ssl环境
+    
+	mkdir -p /etc/ssl/certs
+	export SSL_CERT_DIR=/etc/ssl/certs
+    source /etc/profile
+	opkg install ca-certificates wget
+   
+   chmod +x /ss_watchdog
+		if !(grep -q "ss_watchdog" /etc/crontabs/root); then
+			echo "*/10 * * * * /ss_watchdog >> /var/log/ss_watchdog.log 2>&1" >>/etc/crontabs/root
+			echo "0 1 * * 6 echo "" > /var/log/ss_watchdog.log" >>/etc/crontabs/root
+		fi
+fi
+#创建国内路由表升级脚本
+if echo ${INS_IGNORE} | grep -qi "^y"; then
+	echo "#!/bin/sh">/update_ignorelist
+	echo "wget -O- 'http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest' | \
+awk -F\| '/CN\|ipv4/ { printf("%s/%d\n", $4, 32-log($5)/log(2)) }' > \
+/tmp/ignore.list" >>/update_ignorelist
+	echo "mv /tmp/ignore.list /etc/" >>/update_ignorelist
+	echo "if pidof ss-redir>/dev/null; then" >>/update_ignorelist
+	echo "/etc/init.d/shadowsocks restart" >>/update_ignorelist
+	echo "fi" >>/update_ignorelist
+	
+	chmod +x /update_ignorelist
+		if !(grep -q "update_ignorelist" /etc/crontabs/root); then
+			echo "30    4     *     *     *     /update_ignorelist>/dev/null 2>&1" >>/etc/crontabs/root
+			fi
+fi
+
+#创建自动程序升级脚本
+if echo ${INS_AUTOUP} | grep -qi "^y"; then
+	echo "#!/bin/sh">/autoupgrade.sh
+	echo "opkg update" >>/autoupgrade.sh
+	echo "for ipk in $(opkg list-upgradable | awk '$1!~/^kmod|^Multiple/{print $1}'); do" >>/autoupgrade.sh
+	echo "opkg upgrade $ipk" >>/autoupgrade.sh
+	echo "done" >>/autoupgrade.sh
+	
+	chmod +x /autoupgrade.sh
+		if !(grep -q "autoupgrade.sh" /etc/crontabs/root); then
+			echo "0 3 * * 6 /root/autoupgrade.sh" >>/etc/crontabs/root
+		fi
+fi
+
+
+	
+	
+	
+	
+
