@@ -1,0 +1,73 @@
+#!/bin/sh
+
+INSTALLED=$(opkg list-installed)
+
+for a in $(opkg print-architecture | awk '{print $2}'); do
+	case "$a" in
+		all|noarch)
+			;;
+		ar71xx|bcm53xx|bcm2708|brcm47xx|brcm63xx|kirkwood|mvebu|oxnas|ramips_24kec|sunxi|x86|x86_64)
+			ARCH=${a}
+			;;
+		*)
+			echo "Architectures not support."
+			exit 0
+			;;
+	esac
+done
+
+echo -e "\nTarget Arch:\033[32m $ARCH \033[0m\n"
+
+sed -i "s/^\(option check_signature\)/#\1/" /etc/opkg.conf
+
+if !(grep -q "openwrt_dist" /etc/opkg.conf); then
+	echo "src/gz openwrt_dist http://openwrt-dist.sourceforge.net/packages/OpenWrt/base/$ARCH" >>/etc/opkg.conf
+	echo "src/gz openwrt_dist_luci http://openwrt-dist.sourceforge.net/packages/OpenWrt/luci" >>/etc/opkg.conf
+fi
+
+opkg update
+
+if echo "$INSTALLED" | grep -q "luci"; then
+	LuCI=yes
+fi
+
+read -p "Install the ChinaDNS [Y/n]?" INS_CD
+read -p "Install the DNS-Forwarder [Y/n]?" INS_DF
+read -p "Install the shadowsocks-libev [Y/n]?" INS_SS
+read -p "Install the ShadowVPN [Y/n]?" INS_SV
+
+if echo ${INS_CD} | grep -qi "^y"; then
+	opkg install ChinaDNS
+	if [ "$LuCI" = "yes" ]; then
+		opkg install luci-app-chinadns
+		/etc/init.d/chinadns enable
+	fi
+fi
+
+if echo ${INS_DF} | grep -qi "^y"; then
+	opkg install dns-forwarder
+	if [ "$LuCI" = "yes" ]; then
+		opkg install luci-app-dns-forwarder
+		/etc/init.d/dns-forwarder enable
+	fi
+fi
+
+if echo ${INS_SS} | grep -qi "^y"; then
+	if echo "$INSTALLED" | grep -q "libmbedtls"; then
+		opkg install shadowsocks-libev-mbedtls
+	else
+		opkg install shadowsocks-libev
+	fi
+	if [ "$LuCI" = "yes" ]; then
+		opkg install luci-app-shadowsocks
+		/etc/init.d/shadowsocks enable
+	fi
+fi
+
+if echo ${INS_SV} | grep -qi "^y"; then
+	opkg install ShadowVPN
+	if [ "$LuCI" = "yes" ]; then
+		opkg install luci-app-shadowvpn
+		/etc/init.d/shadowvpn enable
+	fi
+fi
