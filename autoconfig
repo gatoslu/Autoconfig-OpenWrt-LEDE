@@ -132,15 +132,15 @@ fi
 
 #创建自动程序升级脚本
 if echo ${INS_AUTOUP} | grep -qi "^y"; then
-	echo "#!/bin/sh">/autoupgrade.sh
-	echo "opkg update" >>/autoupgrade.sh
-	echo "for ipk in $(opkg list-upgradable | awk '$1!~/^kmod|^Multiple/{print $1}'); do" >>/autoupgrade.sh
-	echo "opkg upgrade $ipk" >>/autoupgrade.sh
-	echo "done" >>/autoupgrade.sh
+	echo "#!/bin/sh">/autoupgrade
+	echo "opkg update" >>/autoupgrade
+	echo "for ipk in $(opkg list-upgradable | awk '$1!~/^kmod|^Multiple/{print $1}'); do" >>/autoupgrade
+	echo "opkg upgrade $ipk" >>/autoupgrade
+	echo "done" >>/autoupgrade
 	
-	chmod +x /autoupgrade.sh
-		if !(grep -q "autoupgrade.sh" /etc/crontabs/root); then
-			echo "0 3 * * 6 /root/autoupgrade.sh" >>/etc/crontabs/root
+	chmod +x /autoupgrade
+		if !(grep -q "autoupgrade" /etc/crontabs/root); then
+			echo "0 3 * * 6 /root/autoupgrade" >>/etc/crontabs/root
 		fi
 fi
 
