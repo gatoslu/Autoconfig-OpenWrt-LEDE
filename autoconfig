@@ -145,4 +145,4 @@ if echo ${INS_AUTOUP} | grep -qi "^y"; then
 fi
 
 
-echo 'instal compelt,enjot it!'
+echo "Instal compelt,enjot it!"
