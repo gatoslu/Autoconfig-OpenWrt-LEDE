@@ -88,7 +88,7 @@ if echo ${INS_SSDOG} | grep -qi "^y"; then
 	echo "wget --spider --quiet --tries=1 --timeout=10 https://www.google.com/" >>/ss_watchdog
 	echo "LOGTIME=$(date "+%Y-%m-%d %H:%M:%S")" >>/ss_watchdog
 	echo "if [ "$?" == "0" ]; then" >>/ss_watchdog
-	echo 'echo '['$LOGTIME'] No Problem.'" >>/ss_watchdog
+	echo "echo '['$LOGTIME'] No Problem.'" >>/ss_watchdog
 	echo "exit 0" >>/ss_watchdog
 	echo "else" >>/ss_watchdog
 	echo "wget --spider --quiet --tries=1 --timeout=10 www.baidu.com" >>/ss_watchdog
@@ -116,10 +116,10 @@ fi
 #创建国内路由表升级脚本
 if echo ${INS_IGNORE} | grep -qi "^y"; then
 	echo "#!/bin/sh">/update_ignorelist
-	echo 'wget -O- 'http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest' | \
+	echo "wget -O- 'http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest' | \
 awk -F\| '/CN\|ipv4/ { printf("%s/%d\n", $4, 32-log($5)/log(2)) }' > \
-/tmp/ignore.list' >>/update_ignorelist
-	echo 'mv /tmp/ignore.list /etc/' >>/update_ignorelist
+/tmp/ignore.list" >>/update_ignorelist
+	echo "mv /tmp/ignore.list /etc/" >>/update_ignorelist
 	echo "if pidof ss-redir>/dev/null; then" >>/update_ignorelist
 	echo "/etc/init.d/shadowsocks restart" >>/update_ignorelist
 	echo "fi" >>/update_ignorelist
@@ -145,4 +145,4 @@ if echo ${INS_AUTOUP} | grep -qi "^y"; then
 fi
 
 
-echo "Instal compelt,enjot it!"
+echo "instal compelt,enjot it!"
