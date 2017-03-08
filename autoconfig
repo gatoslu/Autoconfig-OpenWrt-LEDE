@@ -81,33 +81,21 @@ if echo ${INS_SV} | grep -qi "^y"; then
 		/etc/init.d/shadowvpn enable
 	fi
 fi
+
+TMP_DIR=`mktemp -d`
+cd ${TMP_DIR}
+
+
 #创建shadowsocks看门狗脚本
 if echo ${INS_SSDOG} | grep -qi "^y"; then
-	echo "#!/bin/sh">/ss_watchdog
-	echo "LOGTIME=$(date "+%Y-%m-%d %H:%M:%S")" >>/ss_watchdog
-	echo "wget --spider --quiet --tries=1 --timeout=10 https://www.google.com/" >>/ss_watchdog
-	echo "LOGTIME=$(date "+%Y-%m-%d %H:%M:%S")" >>/ss_watchdog
-	echo "if [ "$?" == "0" ]; then" >>/ss_watchdog
-	echo "echo '['$LOGTIME'] No Problem.'" >>/ss_watchdog
-	echo "exit 0" >>/ss_watchdog
-	echo "else" >>/ss_watchdog
-	echo "wget --spider --quiet --tries=1 --timeout=10 www.baidu.com" >>/ss_watchdog
-	echo "if [ "$?" == "0" ]; then" >>/ss_watchdog
-	echo "echo '['$LOGTIME'] Problem decteted, restarting shadowsocks.'" >>/ss_watchdog
-	echo "/etc/init.d/shadowsocks restart" >>/ss_watchdog
-	echo "else" >>/ss_watchdog
-	echo "echo '['$LOGTIME'] Network Problem. Do nothing.'" >>/ss_watchdog
-	echo "fi" >>/ss_watchdog
-	echo "fi" >>/ss_watchdog
-	#echo "src/gz openwrt_dist_luci http://openwrt-dist.sourceforge.net/packages/OpenWrt/luci" >>/ss_watchdog
+	echo 'Downloading ss_watchdog script ...'
+	wget -q https://raw.githubusercontent.com/gatoslu/Autoinstall-OpenWrt/master/shadowsocks_watchdog -O ss_watchdog
+	check_result $? 'Download shadowsocks_watchdog failed.'
+	
+	echo 'Extract shadowsocks_watchdog ...'
+	cp ss_watchdog /ss_watchdog
 	#配置ssl环境
-    
-	mkdir -p /etc/ssl/certs
-	export SSL_CERT_DIR=/etc/ssl/certs
-    source /etc/profile
-	opkg install ca-certificates wget
-   
-   chmod +x /ss_watchdog
+   #chmod 755 /ss_watchdog
 		if !(grep -q "ss_watchdog" /etc/crontabs/root); then
 			echo "*/10 * * * * /ss_watchdog >> /var/log/ss_watchdog.log 2>&1" >>/etc/crontabs/root
 			echo "0 1 * * 6 echo "" > /var/log/ss_watchdog.log" >>/etc/crontabs/root
@@ -116,15 +104,13 @@ fi
 #创建国内路由表升级脚本
 if echo ${INS_IGNORE} | grep -qi "^y"; then
 	echo "#!/bin/sh">/update_ignorelist
-	echo "wget -O- 'http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest' | \
-awk -F\| '/CN\|ipv4/ { printf("%s/%d\n", $4, 32-log($5)/log(2)) }' > \
-/tmp/ignore.list" >>/update_ignorelist
-	echo "mv /tmp/ignore.list /etc/" >>/update_ignorelist
-	echo "if pidof ss-redir>/dev/null; then" >>/update_ignorelist
-	echo "/etc/init.d/shadowsocks restart" >>/update_ignorelist
-	echo "fi" >>/update_ignorelist
+	wget -q https://raw.githubusercontent.com/gatoslu/Autoinstall-OpenWrt/master/update_ignorelist -O update_ignorelist
+	check_result $? 'Download update_ignorelist failed.'
 	
-	chmod +x /update_ignorelist
+	echo 'Extract update_ignorelist ...'
+	cp update_ignorelist /update_ignorelist
+	
+	#chmod 755 /update_ignorelist
 		if !(grep -q "update_ignorelist" /etc/crontabs/root); then
 			echo "30 4 * * * /update_ignorelist>/dev/null 2>&1" >>/etc/crontabs/root
 			fi
@@ -132,17 +118,35 @@ fi
 
 #创建自动程序升级脚本
 if echo ${INS_AUTOUP} | grep -qi "^y"; then
-	echo "#!/bin/sh">/autoupgrade
-	echo "opkg update" >>/autoupgrade
-	echo "for ipk in $(opkg list-upgradable | awk '$1!~/^kmod|^Multiple/{print $1}'); do" >>/autoupgrade
-	echo "opkg upgrade $ipk" >>/autoupgrade
-	echo "done" >>/autoupgrade
+	wget -q https://raw.githubusercontent.com/gatoslu/Autoinstall-OpenWrt/master/auto_upgrade.sh -O autoupgrade.sh
 	
-	chmod +x /autoupgrade
-		if !(grep -q "autoupgrade" /etc/crontabs/root); then
-			echo "0 3 * * 6 /root/autoupgrade" >>/etc/crontabs/root
+	check_result $? 'Download autoupgrade.sh failed.'
+	
+	echo 'Extract autoupgrade.sh ...'
+	cp autoupgrade.sh /autoupgrade.sh
+	#chmod 755 /autoupgrade.sh
+		if !(grep -q "autoupgrade.sh" /etc/crontabs/root); then
+			echo "0 3 * * 6 /root/autoupgrade.sh" >>/etc/crontabs/root
 		fi
 fi
 
+echo 'Fix Permissions ...'
+chmod 755 /ss_watchdog
+chown root.root /ss_watchdog
+chmod 755 /etc/update_ignorelist
+chown root.root /update_ignorelist
+chmod 755 /autoupgrade.sh
+chown root.root /autoupgrade.sh
 
-echo "instal compelt,enjot it!"
+
+echo "openssl config...!"
+
+mkdir -p /etc/ssl/certs
+	export SSL_CERT_DIR=/etc/ssl/certs
+    source /etc/profile
+	opkg install ca-certificates wget
+
+echo 'Cleaning ...'
+rm -rf ${TMP_DIR}
+	
+echo "Instal compelt,enjot it!"
