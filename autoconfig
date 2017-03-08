@@ -133,11 +133,13 @@ fi
 echo 'Fix Permissions ...'
 chmod 755 /ss_watchdog
 chown root.root /ss_watchdog
-chmod 755 /etc/update_ignorelist
+chmod 755 /update_ignorelist
 chown root.root /update_ignorelist
 chmod 755 /autoupgrade.sh
 chown root.root /autoupgrade.sh
 
+echo 'Cleaning ...'
+rm -rf ${TMP_DIR}
 
 echo "openssl config...!"
 
@@ -146,7 +148,6 @@ mkdir -p /etc/ssl/certs
     source /etc/profile
 	opkg install ca-certificates wget
 
-echo 'Cleaning ...'
-rm -rf ${TMP_DIR}
+
 	
 echo "Instal compelt,enjot it!"
