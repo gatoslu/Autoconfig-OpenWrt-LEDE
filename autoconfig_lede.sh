@@ -14,7 +14,7 @@ if [ "x$(id -u)" != 'x0' ]; then
 fi
 
 if [ -f '/ss_watchdog' ]; then
-  echo 'autoconfig for lede has been installed.'
+  echo 'Autoconfig for lede has been installed.'
   exit 1
 fi
 
