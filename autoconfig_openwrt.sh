@@ -58,6 +58,8 @@ if echo "$INSTALLED" | grep -q "luci"; then
 	LuCI=yes
 fi
 
+
+read -p "Install the Language zh_cn [Y/n]?" INS_ZH_CN
 read -p "Install the ChinaDNS [Y/n]?" INS_CD
 read -p "Install the DNS-Forwarder [Y/n]?" INS_DF
 read -p "Install the shadowsocks-libev [Y/n]?" INS_SS
@@ -71,6 +73,9 @@ read -p "Created the update_ignorelist [Y/n]?" INS_IGNORE
 read -p "Created the autoupgrade.sh [Y/n]?" INS_AUTOUP
 
 
+if echo ${INS_ZH_CN} | grep -qi "^y"; then
+	opkg install luci-i18n-base-zh-cn luci-i18n-commands-zh-cn luci-i18n-diag-core-zh-cn luci-i18n-firewall-zh-cn
+fi
 
 if echo ${INS_CD} | grep -qi "^y"; then
 	opkg install ChinaDNS
