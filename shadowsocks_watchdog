@@ -13,3 +13,4 @@ else
 	else
 		echo '['$LOGTIME'] Network Problem. Do nothing.'
 	fi
+fi
