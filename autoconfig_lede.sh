@@ -26,6 +26,15 @@ if [ ! -f '/usr/bin/wget' ]; then
   echo 'Install wget succeed.'
 fi
 
+
+if [ ! -f '/usr/lib/opkg/info/luci-i18n-base-zh-cn.list' ]; then
+  echo 'Installing Language zh-cn ...'
+  opkg update
+  opkg install luci-i18n-base-zh-cn luci-i18n-commands-zh-cn luci-i18n-diag-core-zh-cn luci-i18n-firewall-zh-cn
+  check_result $? "Can't install Language zh-cn."
+  echo 'Install Language zh-cn succeed.'
+fi
+
  
 INSTALLED=$(opkg list-installed)
 
@@ -58,6 +67,9 @@ if echo "$INSTALLED" | grep -q "luci"; then
 	LuCI=yes
 fi
 
+#询问安装中文语言包
+read -p "Install Language zh-cn [Y/n]?" INS_ZH_CN
+
 read -p "Install the ChinaDNS [Y/n]?" INS_CD
 read -p "Install the DNS-Forwarder [Y/n]?" INS_DF
 read -p "Install the shadowsocks-libev [Y/n]?" INS_SS
@@ -71,6 +83,9 @@ read -p "Created the update_ignorelist [Y/n]?" INS_IGNORE
 read -p "Created the autoupgrade.sh [Y/n]?" INS_AUTOUP
 
 
+if echo ${INS_ZH_CN} | grep -qi "^y"; then
+	opkg install luci-i18n-base-zh-cn luci-i18n-commands-zh-cn luci-i18n-diag-core-zh-cn luci-i18n-firewall-zh-cn
+fi
 
 if echo ${INS_CD} | grep -qi "^y"; then
 	opkg install ChinaDNS
