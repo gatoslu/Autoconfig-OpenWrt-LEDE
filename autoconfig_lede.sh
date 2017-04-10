@@ -90,9 +90,9 @@ cd ${TMP_DIR}
 if echo ${INS_SSDOG} | grep -qi "^y"; then
 	echo 'Downloading ss_watchdog script ...'
 	wget -q https://raw.githubusercontent.com/gatoslu/Autoinstall-OpenWrt/master/shadowsocks_watchdog -O ss_watchdog
-	check_result $? 'Download shadowsocks_watchdog failed.'
+	check_result $? 'Download ss_watchdog failed.'
 	
-	echo 'Extract shadowsocks_watchdog ...'
+	echo 'Extract ss_watchdog ...'
 	cp ss_watchdog /ss_watchdog
 	#配置ssl环境
    #chmod 755 /ss_watchdog
@@ -103,7 +103,7 @@ if echo ${INS_SSDOG} | grep -qi "^y"; then
 fi
 #创建国内路由表升级脚本
 if echo ${INS_IGNORE} | grep -qi "^y"; then
-	echo "#!/bin/sh">/update_ignorelist
+	echo 'Downloading update_ignorelist script ...'
 	wget -q https://raw.githubusercontent.com/gatoslu/Autoinstall-OpenWrt/master/update_ignorelist -O update_ignorelist
 	check_result $? 'Download update_ignorelist failed.'
 	
@@ -118,6 +118,7 @@ fi
 
 #创建自动程序升级脚本
 if echo ${INS_AUTOUP} | grep -qi "^y"; then
+	echo 'Downloading autoupgrade.sh script ...'
 	wget -q https://raw.githubusercontent.com/gatoslu/Autoinstall-OpenWrt/master/auto_upgrade.sh -O autoupgrade.sh
 	
 	check_result $? 'Download autoupgrade.sh failed.'
