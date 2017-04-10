@@ -1,6 +1,6 @@
-# Autoinstall-OpenWrt
+# Autoinstall-OpenWrt/LEDE
 
-# Install shadowsocks in OpenWrt by automation
+# Install shadowsocks in OpenWrt/LEDE by automation
 
 # 此脚本用于自动安装shadowsocks相关包，免去手动安装的繁琐，
 
@@ -26,6 +26,7 @@
     # src/gz openwrt_dist_luci http://openwrt-dist.sourceforge.net/packages/OpenWrt/luci
 
 # 更新日志
+#2017.4.10 更新软件名称，及脚本中的一些错误，添加LEDE自动配置方案
 
 #2017.3.8 更新openwrt路由的一件下载shadowsocks及配置方案
 
