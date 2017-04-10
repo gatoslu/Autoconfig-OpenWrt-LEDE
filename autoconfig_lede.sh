@@ -27,14 +27,6 @@ if [ ! -f '/usr/bin/wget' ]; then
 fi
 
 
-if [ ! -f '/usr/lib/opkg/info/luci-i18n-base-zh-cn.list' ]; then
-  echo 'Installing Language zh-cn ...'
-  opkg update
-  opkg install luci-i18n-base-zh-cn luci-i18n-commands-zh-cn luci-i18n-diag-core-zh-cn luci-i18n-firewall-zh-cn
-  check_result $? "Can't install Language zh-cn."
-  echo 'Install Language zh-cn succeed.'
-fi
-
  
 INSTALLED=$(opkg list-installed)
 
