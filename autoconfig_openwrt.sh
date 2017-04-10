@@ -1,5 +1,31 @@
 #!/bin/sh
 #自动安装openwrt版shadowsocks脚本和用户配置脚本
+
+check_result() {
+  if [ $1 -ne 0 ]; then
+    echo "Error: $2" >&2
+    exit $1
+  fi
+}
+
+if [ "x$(id -u)" != 'x0' ]; then
+  echo 'Error: This script can only be executed by root'
+  exit 1
+fi
+
+if [ -f '/ss_watchdog' ]; then
+  echo 'Autoconfig for OpenWrt has been installed.'
+  exit 1
+fi
+
+if [ ! -f '/usr/bin/wget' ]; then
+  echo 'Installing wget ...'
+  opkg update
+  opkg install wget
+  check_result $? "Can't install wget."
+  echo 'Install wget succeed.'
+fi
+
  
 INSTALLED=$(opkg list-installed)
 
