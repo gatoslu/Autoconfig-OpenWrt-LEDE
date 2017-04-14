@@ -120,7 +120,7 @@ cd ${TMP_DIR}
 #创建shadowsocks看门狗脚本
 if echo ${INS_SSDOG} | grep -qi "^y"; then
 	echo 'Downloading ss_watchdog script ...'
-	wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoinstall-OpenWrt/master/shadowsocks_watchdog -O ss_watchdog
+	wget -N --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoinstall-OpenWrt/master/shadowsocks_watchdog -O ss_watchdog
 	check_result $? 'Download shadowsocks_watchdog failed.'
 	
 	echo 'Extract shadowsocks_watchdog ...'
@@ -135,7 +135,7 @@ fi
 #创建国内路由表升级脚本
 if echo ${INS_IGNORE} | grep -qi "^y"; then
 	echo "#!/bin/sh">/update_ignorelist
-	wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoinstall-OpenWrt/master/update_ignorelist -O update_ignorelist
+	wget -N --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoinstall-OpenWrt/master/update_ignorelist -O update_ignorelist
 	check_result $? 'Download update_ignorelist failed.'
 	
 	echo 'Extract update_ignorelist ...'
@@ -149,7 +149,7 @@ fi
 
 #创建自动程序升级脚本
 if echo ${INS_AUTOUP} | grep -qi "^y"; then
-	wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoinstall-OpenWrt/master/auto_upgrade.sh -O autoupgrade.sh
+	wget -N --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoinstall-OpenWrt/master/auto_upgrade.sh -O autoupgrade.sh
 	
 	check_result $? 'Download autoupgrade.sh failed.'
 	
