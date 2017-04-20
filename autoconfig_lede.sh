@@ -84,11 +84,11 @@ if echo ${INS_NGROK} | grep -qi "^y"; then
 	
 	echo 'Extract ngrokc ...'
 	cp ngrokc /usr/bin/ngrokc
-	chmod +x /usr/bin/ngrokc
 	
 	echo 'Installing luci-app-ngrok ... '
 	wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoconfig-OpenWrt-LEDE/master/ngrokc/luci-app-ngrokc_allv1.1.ipk -O luci-app-ngrokc_allv1.1.ipk
 	opkg install luci-app-ngrokc_allv1.1.ipk
+	/etc/init.d/ngrokc enable
 	
 fi
 if echo ${INS_ZH_CN} | grep -qi "^y"; then
@@ -189,6 +189,8 @@ chmod 755 /update_ignorelist
 chown root.root /update_ignorelist
 chmod 755 /autoupgrade.sh
 chown root.root /autoupgrade.sh
+chmod 755 /usr/bin/ngrokc
+chown root.root /usr/bin/ngrokc
 
 echo 'Cleaning ...'
 rm -rf ${TMP_DIR}
