@@ -24,6 +24,8 @@
     # src/gz openwrt_dist_luci http://openwrt-dist.sourceforge.net/packages/OpenWrt/luci
 
 # 更新日志
+#2017.4.20 添加ngrok安装选项
+
 #2017.4.11 添加中文语言包安装选项
 
 #2017.4.10 更新软件名称，增加脚本中的下载结果检查以及root权限检查和wget组件检查，添加LEDE自动配置方案
