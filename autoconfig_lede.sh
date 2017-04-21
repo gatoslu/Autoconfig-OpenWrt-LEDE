@@ -62,7 +62,7 @@ fi
 #询问安装中文语言包
 read -p "Install Language zh-cn [Y/n]?" INS_ZH_CN
 read -p "Install ngrok [Y/n]?" INS_NGROK
-
+read -p "Install vlmcsd [Y/n]?" INS_KMS
 
 read -p "Install the ChinaDNS [Y/n]?" INS_CD
 read -p "Install the DNS-Forwarder [Y/n]?" INS_DF
@@ -77,6 +77,10 @@ read -p "Created the update_ignorelist [Y/n]?" INS_IGNORE
 read -p "Created the autoupgrade.sh [Y/n]?" INS_AUTOUP
 
 
+
+
+
+#安装NGROK模块
 if echo ${INS_NGROK} | grep -qi "^y"; then
 	echo 'Downloading ngrok ...'
 	wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoconfig-OpenWrt-LEDE/master/ngrokc/lede_ngrokc/ngrokc -O ngrokc
@@ -88,9 +92,22 @@ if echo ${INS_NGROK} | grep -qi "^y"; then
 	echo 'Installing luci-app-ngrok ... '
 	wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoconfig-OpenWrt-LEDE/master/ngrokc/luci-app-ngrokc_allv1.1.ipk -O luci-app-ngrokc_allv1.1.ipk
 	opkg install luci-app-ngrokc_allv1.1.ipk
-	/etc/init.d/ngrokc enable
-	
+	/etc/init.d/ngrokc enable	
 fi
+#安装KMS
+if echo ${INS_KMS} | grep -qi "^y"; then
+	echo 'Downloading vlmcsd ...'
+	wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoconfig-OpenWrt-LEDE/master/KMS/LEDE/vlmcsd_svn1108-1_mipsel_24kc.ipk -O vlmcsd.ipk
+	check_result $? 'Download vlmcsd failed.'
+	opkg install vlmcsd.ipk	
+	
+	echo 'Installing luci-app-vlmcsd ... '
+	wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoconfig-OpenWrt-LEDE/master/KMS/LEDE/luci-app-vlmcsd_1.0.1-2_all.ipk -O luci-app-vlmcsd.ipk
+	opkg install luci-app-vlmcsd.ipk	
+fi
+
+
+
 if echo ${INS_ZH_CN} | grep -qi "^y"; then
 	opkg install luci-i18n-base-zh-cn luci-i18n-commands-zh-cn luci-i18n-diag-core-zh-cn luci-i18n-firewall-zh-cn
 fi
