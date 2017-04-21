@@ -89,6 +89,19 @@ if echo ${INS_NGROK} | grep -qi "^y"; then
 	
 fi
 
+#安装KMS
+if echo ${INS_KMS} | grep -qi "^y"; then
+	echo 'Downloading vlmcsd ...'
+	wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoconfig-OpenWrt-LEDE/master/KMS/OpenWrt/vlmcsd_svn1108-1_ramips_24kec.ipk -O vlmcsd.ipk
+	check_result $? 'Download vlmcsd failed.'
+	opkg install vlmcsd.ipk	
+	
+	echo 'Installing luci-app-vlmcsd ... '
+	wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoconfig-OpenWrt-LEDE/master/KMS/OpenWrt/luci-app-vlmcsd_1.0.1-2_all.ipk -O luci-app-vlmcsd.ipk
+	opkg install luci-app-vlmcsd.ipk
+	check_result $? 'Download luci-app-vlmcsd failed.'
+fi
+
 
 
 
