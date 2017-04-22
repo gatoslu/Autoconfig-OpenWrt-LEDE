@@ -61,5 +61,11 @@ chmod +x autoconfig_openwrt.sh
 - 2017.3.8 更新openwrt路由的一件下载shadowsocks及配置方案
 
 
-##感谢clowwindy,aa65535,dosgo,,madeye,cokebar的贡献.
+## 致敬
+- openwrt
+- lede-project
+- clowwindy
+- aa65535
+- dosgo
+- madeye
 
