@@ -61,7 +61,7 @@ fi
 
 read -p "Install the Language zh_cn [Y/n]?" INS_ZH_CN
 read -p "Install the ngrok [Y/n]?" INS_NGROK
-
+read -p "Install the vlmcsd [Y/n]?" INS_KMS
 read -p "Install the ChinaDNS [Y/n]?" INS_CD
 read -p "Install the DNS-Forwarder [Y/n]?" INS_DF
 read -p "Install the shadowsocks-libev [Y/n]?" INS_SS
@@ -75,23 +75,23 @@ read -p "Created the update_ignorelist [Y/n]?" INS_IGNORE
 read -p "Created the autoupgrade.sh [Y/n]?" INS_AUTOUP
 
 if echo ${INS_NGROK} | grep -qi "^y"; then
-	echo 'Downloading ngrok ...'
-	wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoconfig-OpenWrt-LEDE/master/ngrokc/openwrt_ngrok/ngrokc -O ngrokc
+	echo 'Installing ngrok ...'
+	wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoconfig-OpenWrt-LEDE/master/ngrokc/openwrt_ngrok/ngrokc_20160829-1_ramips_24kec.ipk -O ngrokc.ipk
 	check_result $? 'Download ngrokc failed.'
-	
-	echo 'Extract ngrokc ...'
-	cp ngrokc /usr/bin/ngrokc
+	opkg install ngrokc.ipk
+
 	
 	echo 'Installing luci-app-ngrok ... '
 	wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoconfig-OpenWrt-LEDE/master/ngrokc/luci-app-ngrokc_allv1.1.ipk -O luci-app-ngrokc_allv1.1.ipk
+	check_result $? 'Download luci-app-ngrokc failed.'
 	opkg install luci-app-ngrokc_allv1.1.ipk
-	/etc/init.d/ngrokc enable
+	
 	
 fi
 
 #安装KMS
 if echo ${INS_KMS} | grep -qi "^y"; then
-	echo 'Downloading vlmcsd ...'
+	echo 'Installing vlmcsd ...'
 	wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoconfig-OpenWrt-LEDE/master/KMS/OpenWrt/vlmcsd_svn1108-1_ramips_24kec.ipk -O vlmcsd.ipk
 	check_result $? 'Download vlmcsd failed.'
 	opkg install vlmcsd.ipk	
