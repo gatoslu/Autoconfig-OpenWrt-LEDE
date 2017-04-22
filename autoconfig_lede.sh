@@ -89,8 +89,9 @@ if echo ${INS_NGROK} | grep -qi "^y"; then
 	
 	echo 'Installing luci-app-ngrok ... '
 	wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoconfig-OpenWrt-LEDE/master/ngrokc/luci-app-ngrokc_allv1.1.ipk -O luci-app-ngrokc_allv1.1.ipk
-	opkg install luci-app-ngrokc_allv1.1.ipk
 	check_result $? 'Download luci-app-ngrok failed.'
+	opkg install luci-app-ngrokc_allv1.1.ipk
+	
 fi
 
 #安装KMS
@@ -102,8 +103,9 @@ if echo ${INS_KMS} | grep -qi "^y"; then
 	
 	echo 'Installing luci-app-vlmcsd ... '
 	wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoconfig-OpenWrt-LEDE/master/KMS/LEDE/luci-app-vlmcsd_1.0.1-2_all.ipk -O luci-app-vlmcsd.ipk
-	opkg install luci-app-vlmcsd.ipk	
 	check_result $? 'Download luci-app-vlmcsd failed.'
+	opkg install luci-app-vlmcsd.ipk	
+	
 fi
 
 
