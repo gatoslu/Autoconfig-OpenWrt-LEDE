@@ -22,8 +22,33 @@
     # src/gz openwrt_dist http://openwrt-dist.sourceforge.net/packages/OpenWrt/base/{architecture}
     
     # src/gz openwrt_dist_luci http://openwrt-dist.sourceforge.net/packages/OpenWrt/luci
+    
+# 使用方法
+
+1，LEDE
+执行命令：
+
+wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoconfig-OpenWrt-LEDE/master/autoconfig_lede.sh
+chmod +x autoconfig_lede.sh
+./autoconfig.sh
+
+2,OpenWrt
+执行命令：
+
+wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoconfig-OpenWrt-LEDE/master/autoconfig_openwrt.sh
+chmod +x autoconfig_openwrt.sh
+./auconfig_openwrt.sh
+
+
+
+
+
+
 
 # 更新日志
+
+#2017.4.22 添加kms安装选项，更新相关编译文件
+
 #2017.4.20 添加ngrok安装选项
 
 #2017.4.11 添加中文语言包安装选项
