@@ -82,21 +82,20 @@ read -p "Created the autoupgrade.sh [Y/n]?" INS_AUTOUP
 
 #安装NGROK模块
 if echo ${INS_NGROK} | grep -qi "^y"; then
-	echo 'Downloading ngrok ...'
-	wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoconfig-OpenWrt-LEDE/master/ngrokc/lede_ngrokc/ngrokc -O ngrokc
+	echo 'Installing ngrok ...'
+	wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoconfig-OpenWrt-LEDE/master/ngrokc/lede_ngrokc/ngrokc_20160829-1_mipsel_24kc.ipk -O ngrokc.ipk
 	check_result $? 'Download ngrokc failed.'
-	
-	echo 'Extract ngrokc ...'
-	cp ngrokc /usr/bin/ngrokc
+	opkg install ngrokc.ipk
 	
 	echo 'Installing luci-app-ngrok ... '
 	wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoconfig-OpenWrt-LEDE/master/ngrokc/luci-app-ngrokc_allv1.1.ipk -O luci-app-ngrokc_allv1.1.ipk
 	opkg install luci-app-ngrokc_allv1.1.ipk
-	/etc/init.d/ngrokc enable	
+	check_result $? 'Download luci-app-ngrok failed.'
 fi
+
 #安装KMS
 if echo ${INS_KMS} | grep -qi "^y"; then
-	echo 'Downloading vlmcsd ...'
+	echo 'Installing vlmcsd ...'
 	wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoconfig-OpenWrt-LEDE/master/KMS/LEDE/vlmcsd_svn1108-1_mipsel_24kc.ipk -O vlmcsd.ipk
 	check_result $? 'Download vlmcsd failed.'
 	opkg install vlmcsd.ipk	
