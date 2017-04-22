@@ -98,8 +98,9 @@ if echo ${INS_KMS} | grep -qi "^y"; then
 	
 	echo 'Installing luci-app-vlmcsd ... '
 	wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoconfig-OpenWrt-LEDE/master/KMS/OpenWrt/luci-app-vlmcsd_1.0.1-2_all.ipk -O luci-app-vlmcsd.ipk
-	opkg install luci-app-vlmcsd.ipk
 	check_result $? 'Download luci-app-vlmcsd failed.'
+	opkg install luci-app-vlmcsd.ipk
+	
 fi
 
 
