@@ -9,6 +9,8 @@
   
   # 配置为：
   
+  
+  
   # 1、配置shadowsocks，Chinadns，shadowvpn，会是否询问安装
   
   # 2、配置shadowsocks看门狗功能
@@ -26,17 +28,23 @@
 # 使用方法
 
 1，LEDE
+
 执行命令：
 
 wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoconfig-OpenWrt-LEDE/master/autoconfig_lede.sh
+
 chmod +x autoconfig_lede.sh
+
 ./autoconfig.sh
 
 2,OpenWrt
+
 执行命令：
 
 wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoconfig-OpenWrt-LEDE/master/autoconfig_openwrt.sh
+
 chmod +x autoconfig_openwrt.sh
+
 ./auconfig_openwrt.sh
 
 
