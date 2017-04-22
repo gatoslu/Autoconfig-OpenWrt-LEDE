@@ -10,16 +10,15 @@
 ## 相关功能配置简介：
   
   
+ - 1、配置shadowsocks，Chinadns，shadowvpn，会是否询问安装
   
-  -  1、配置shadowsocks，Chinadns，shadowvpn，会是否询问安装
+ - 2、配置shadowsocks看门狗功能
   
-  -  2、配置shadowsocks看门狗功能
+ - 3、配置国内路由表自动升级功能
   
-  -  3、配置国内路由表自动升级功能
+ - 4、配置路由软件自动检测升级功能
   
-  -  4、配置路由软件自动检测升级功能
-  
-  -  5、增加aa65535配置的SourceForge源
+ - 5、增加aa65535配置的SourceForge源
   
     # src/gz openwrt_dist http://openwrt-dist.sourceforge.net/packages/OpenWrt/base/{architecture}
     
@@ -27,9 +26,7 @@
     
 ## 使用方法
 
-- LEDE
-
-执行命令：
+- LEDE 执行命令：
 
 wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoconfig-OpenWrt-LEDE/master/autoconfig_lede.sh
 
@@ -37,9 +34,7 @@ chmod +x autoconfig_lede.sh
 
 ./autoconfig.sh
 
-- OpenWrt
-
-执行命令：
+- OpenWrt 执行命令：
 
 wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoconfig-OpenWrt-LEDE/master/autoconfig_openwrt.sh
 
@@ -66,4 +61,5 @@ chmod +x autoconfig_openwrt.sh
 - 2017.3.8 更新openwrt路由的一件下载shadowsocks及配置方案
 
 
-#脚本中的软件均来自aa65535同学，感谢贡献。
+##感谢clowwindy,aa65535,dosgo,,madeye,cokebar的贡献.
+
