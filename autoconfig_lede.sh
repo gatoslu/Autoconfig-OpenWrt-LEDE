@@ -167,8 +167,8 @@ if echo ${INS_SSDOG} | grep -qi "^y"; then
 	#配置ssl环境
    #chmod 755 /ss_watchdog
 		if !(grep -q "ss_watchdog" /etc/crontabs/root); then
-			echo "*/10 * * * * /ss_watchdog >> /var/log/ss_watchdog.log 2>&1" >>/etc/crontabs/root
-			echo "0 1 * * 6 echo "" > /var/log/ss_watchdog.log" >>/etc/crontabs/root
+			echo "*/30 * * * * /ss_watchdog >> /var/log/ss_watchdog.log 2>&1" >>/etc/crontabs/root
+			echo "0 3 * * 6 echo "" > /var/log/ss_watchdog.log" >>/etc/crontabs/root
 		fi
 fi
 #创建国内路由表升级脚本
@@ -197,7 +197,7 @@ if echo ${INS_AUTOUP} | grep -qi "^y"; then
 	cp autoupgrade.sh /autoupgrade.sh
 	#chmod 755 /autoupgrade.sh
 		if !(grep -q "autoupgrade.sh" /etc/crontabs/root); then
-			echo "0 3 * * 6 /root/autoupgrade.sh" >>/etc/crontabs/root
+			echo "5 5 * * 6 /root/autoupgrade.sh" >>/etc/crontabs/root
 		fi
 fi
 
@@ -219,7 +219,7 @@ echo "openssl config...!"
 mkdir -p /etc/ssl/certs
 	export SSL_CERT_DIR=/etc/ssl/certs
     source /etc/profile
-	opkg install ca-certificates wget
+	opkg install ca-certificates wget ca-bundle
 
 
 	
