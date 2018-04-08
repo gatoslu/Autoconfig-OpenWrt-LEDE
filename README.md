@@ -1,17 +1,17 @@
 ## Autoinstall-OpenWrt/LEDE    Install shadowsocks in OpenWrt/LEDE by automation
 
--  此脚本用于自动安装shadowsocks相关包，免去手动安装的繁琐，
+-  此脚本用于OpenWrt/LEDE中自动安装Shadowsocks相关包，免去手动安装的繁琐步骤
 
-- 以及不会在openwrt中安装科学上网服务的同学。可能不适用所有情况，请自行检查确认能否使用。
+- 以及不会在OpenWrt/LEDE中安装科学上网服务的同学。可能不适用所有情况，请自行检查确认能否使用。
 
-- 其中脚本：autoconfig_openwrt.sh和autoconfig_lede.sh为一键自动化配置方案，适用于MT7620系列路由通用，公开代码
+- 其中脚本：autoconfig_openwrt.sh和autoconfig_lede.sh为一键自动化配置方案，适用于MT7620系列路由器，请在对应的系统中使用相关脚本！
 
   
 ## 相关功能配置简介：
   
   
- - 1、配置shadowsocks，Chinadns，shadowvpn，会是否询问安装
-  
+ - 1、配置shadowsocks，Chinadns，shadowvpn，自动询问是否安装相应服务
+ 
  - 2、配置shadowsocks看门狗功能
   
  - 3、配置国内路由表自动升级功能
@@ -62,8 +62,7 @@ chmod +x autoconfig_openwrt.sh
 
 
 ## 致敬
-- openwrt
-- lede-project
+- OpenWrt/LEDE
 - clowwindy
 - aa65535
 - dosgo
