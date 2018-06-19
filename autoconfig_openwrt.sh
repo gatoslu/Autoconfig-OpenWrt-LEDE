@@ -48,8 +48,8 @@ echo -e "\nTarget Arch:\033[32m $ARCH \033[0m\n"
 sed -i "s/^\(option check_signature\)/#\1/" /etc/opkg.conf
 
 if !(grep -q "openwrt_dist" /etc/opkg.conf); then
-	echo "src/gz openwrt_dist http://openwrt-dist.sourceforge.net/packages/OpenWrt/base/$ARCH" >>/etc/opkg.conf
-	echo "src/gz openwrt_dist_luci http://openwrt-dist.sourceforge.net/packages/OpenWrt/luci" >>/etc/opkg.conf
+	echo "src/gz openwrt_dist http://openwrt-dist.sourceforge.net/packages/base/$ARCH" >>/etc/opkg.conf
+	echo "src/gz openwrt_dist_luci http://openwrt-dist.sourceforge.net/packages/luci/" >>/etc/opkg.conf
 fi
 
 opkg update
