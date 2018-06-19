@@ -20,9 +20,9 @@
   
  - 5、增加aa65535配置的SourceForge源
   
-    # src/gz openwrt_dist http://openwrt-dist.sourceforge.net/packages/OpenWrt/base/{architecture}
+    # src/gz openwrt_dist http://openwrt-dist.sourceforge.net/packages/base/{architecture}
     
-    # src/gz openwrt_dist_luci http://openwrt-dist.sourceforge.net/packages/OpenWrt/luci
+    # src/gz openwrt_dist_luci http://openwrt-dist.sourceforge.net/packages/luci
     
 ## 使用方法
 
