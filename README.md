@@ -32,7 +32,7 @@ wget --no-check-certificate https://raw.githubusercontent.com/gatoslu/Autoconfig
 
 chmod +x autoconfig_lede.sh
 
-./autoconfig.sh
+./autoconfig_lede.sh
 
 - OpenWrt 执行命令：
 
