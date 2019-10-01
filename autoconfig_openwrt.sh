@@ -216,4 +216,4 @@ mkdir -p /etc/ssl/certs
 
 
 	
-echo "Instal compelt,enjot it!"
+echo "Install Complete,Enjot it!"
